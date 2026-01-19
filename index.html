@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Under Construction – Cyberpunk Level 2.5</title>
+<title>Under Construction – Cyberpunk Level 3</title>
 
 <style>
 /* RESET */
@@ -12,9 +12,10 @@ body {
   overflow-x: hidden;
   font-family: Arial, sans-serif;
   color: white;
+  background: #000;
 }
 
-/* CANVAS BACKGROUND */
+/* CANVAS */
 #city {
   position: fixed;
   top: 0;
@@ -25,7 +26,7 @@ body {
   z-index: -1;
 }
 
-/* TITLE TEXT */
+/* TITLE BOX */
 #title-box {
   position: relative;
   margin-top: 40px;
@@ -33,9 +34,51 @@ body {
   text-align: center;
   font-size: 2rem;
   letter-spacing: 2px;
+  font-weight: bold;
+  color: #00f0ff;
+  overflow: hidden;
 }
 
-/* BUTTON SCROLL AREA */
+/* GLITCH TEXT */
+.glitch {
+  position: relative;
+  color: #00f0ff;
+}
+.glitch::before,
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+}
+.glitch::before {
+  animation: glitchTop 1s infinite linear alternate-reverse;
+  clip: rect(0, 900px, 30%, 0);
+  color: #ff00e6;
+}
+.glitch::after {
+  animation: glitchBottom 1s infinite linear alternate-reverse;
+  clip: rect(70%, 900px, 100%, 0);
+  color: #39ff14;
+}
+
+@keyframes glitchTop {
+  0% {transform: translate(0px,-2px);}
+  20% {transform: translate(-3px,2px);}
+  40% {transform: translate(3px,0);}
+  60% {transform: translate(-2px,1px);}
+  80% {transform: translate(2px,-1px);}
+  100% {transform: translate(0,0);}
+}
+@keyframes glitchBottom {
+  0% {transform: translate(0px,2px);}
+  20% {transform: translate(2px,-2px);}
+  40% {transform: translate(-2px,1px);}
+  60% {transform: translate(1px,-1px);}
+  80% {transform: translate(-1px,2px);}
+  100% {transform: translate(0,0);}
+}
+
+/* BUTTONS */
 #button-box {
   margin-top: 100px;
   width: 100%;
@@ -43,11 +86,10 @@ body {
   display: flex;
   flex-direction: column;
   gap: 120px;
-  padding-bottom: 200vh; /* EXTREM SCROLL-BEREICH */
+  padding-bottom: 200vh; /* Scrollbar */
   padding-top: 50px;
 }
 
-/* BUTTON STYLE */
 .btn {
   width: 260px;
   margin: 0 auto;
@@ -62,25 +104,37 @@ body {
   transition: 0.3s;
   animation: float 3s infinite ease-in-out;
   box-shadow: 0 0 18px #00f0ff88, inset 0 0 10px #00f0ff44;
-  opacity: 0;               /* Animation Start */
+  opacity: 0;  
   transform: translateY(40px);
+  position: relative;
+  overflow: hidden;
 }
 
-/* hover effect */
-.btn:hover {
-  background: #00f0ff;
-  color: black;
-  transform: scale(1.08);
+/* Button hover funkeneffekt */
+.btn::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: linear-gradient(120deg, #00f0ff, #ff00e6, #39ff14);
+  opacity: 0.7;
+  transition: 0.4s;
+  mix-blend-mode: screen;
+}
+.btn:hover::after {
+  width: 100%;
 }
 
-/* floating animation */
+/* float animation */
 @keyframes float {
   0%   { transform: translateY(0px); }
   50%  { transform: translateY(-10px); }
   100% { transform: translateY(0px); }
 }
 
-/* scroll reveal animation */
+/* scroll reveal */
 .reveal {
   opacity: 1 !important;
   transform: translateY(0px) !important;
@@ -91,12 +145,12 @@ body {
 
 <body>
 
-<!-- CANVAS LAYER -->
 <canvas id="city"></canvas>
 
-<!-- TEXT -->
+<!-- TITLE -->
 <div id="title-box">
-  🚧 Under Construction 🚧 <br>
+  <span class="glitch" data-text="🚧 Under Construction 🚧">🚧 Under Construction 🚧</span>
+  <br>
   Hello! Our website is still in progress.<br>
   Stay tuned, exciting things are coming soon!
 </div>
@@ -111,10 +165,9 @@ body {
 </div>
 
 <script>
-/* ============================
-   CYBERPUNK BACKGROUND (CANVAS)
-   ============================ */
-
+/* =========================
+   CYBERPUNK CANVAS
+========================= */
 const canvas = document.getElementById("city");
 const ctx = canvas.getContext("2d");
 
@@ -123,7 +176,6 @@ canvas.height = window.innerHeight;
 
 const neonColors = ["#00f0ff","#ff00e6","#39ff14","#ffe600"];
 
-/* BUILDINGS */
 let buildings = [];
 for (let i = 0; i < 80; i++) {
   buildings.push({
@@ -137,7 +189,6 @@ for (let i = 0; i < 80; i++) {
   });
 }
 
-/* PARTICLES */
 let particles = [];
 for (let i = 0; i < 150; i++) {
   particles.push({
@@ -148,37 +199,38 @@ for (let i = 0; i < 150; i++) {
   });
 }
 
-/* DRAW LOOP */
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   // Gradient Background
-  let gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+  let gradient = ctx.createLinearGradient(0,0,0,canvas.height);
   gradient.addColorStop(0, "#001322");
   gradient.addColorStop(1, "#000");
   ctx.fillStyle = gradient;
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillRect(0,0,canvas.width,canvas.height);
 
-  // Buildings
+  // Scroll-Height Einfluss auf Gebäude
+  let scrollFactor = window.scrollY / window.innerHeight;
+  
   for (let b of buildings) {
-    ctx.shadowBlur = b.glow;
+    ctx.shadowBlur = b.glow + scrollFactor*15;
     ctx.shadowColor = b.color;
 
     ctx.fillStyle = b.color + "33";
     ctx.fillRect(b.x, b.y - b.height, b.width, b.height);
 
-    b.y += b.speed * Math.sin(Date.now() * 0.0004 + b.x);
+    b.y += b.speed * Math.sin(Date.now() * 0.0004 + b.x) * (1 + scrollFactor);
   }
 
-  // Particle Rain
+  // Particles
   ctx.fillStyle = "#00f0ff";
   for (let p of particles) {
-    ctx.fillRect(p.x, p.y, p.size, p.size * 4);
+    ctx.fillRect(p.x, p.y, p.size, p.size*4);
 
-    p.y += p.speed;
+    p.y += p.speed * (1 + scrollFactor*0.5);
     if (p.y > canvas.height) {
       p.y = -10;
-      p.x = Math.random() * canvas.width;
+      p.x = Math.random()*canvas.width;
     }
   }
 
@@ -186,28 +238,24 @@ function draw() {
 }
 draw();
 
-/* ============================
-   SCROLL REVEAL FOR BUTTONS
-   ============================ */
-
+/* =========================
+   SCROLL REVEAL BUTTONS
+========================= */
 const buttons = document.querySelectorAll(".btn");
-
-function revealOnScroll() {
-  const triggerBottom = window.innerHeight * 0.85;
-
-  buttons.forEach(btn => {
+function revealOnScroll(){
+  const triggerBottom = window.innerHeight*0.85;
+  buttons.forEach(btn=>{
     const boxTop = btn.getBoundingClientRect().top;
-    if (boxTop < triggerBottom) {
+    if(boxTop < triggerBottom){
       btn.classList.add("reveal");
     }
   });
 }
-
 document.addEventListener("scroll", revealOnScroll);
 revealOnScroll();
 
-/* Resize canvas */
-window.onresize = () => {
+/* RESIZE CANVAS */
+window.onresize = ()=>{
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 };
@@ -215,6 +263,7 @@ window.onresize = () => {
 
 </body>
 </html>
+
 
 
 
