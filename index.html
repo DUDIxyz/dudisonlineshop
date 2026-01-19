@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Under Construction – Cyberpunk Neon</title>
+<title>Under Construction – Cyberpunk Clear Background</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
@@ -12,7 +12,7 @@ body {
   font-family: 'Orbitron', Arial, sans-serif;
   color: #d0f0e0;
   overflow-x: hidden;
-  background: #081a16; /* dunklerer, angenehmer Hintergrund */
+  background: #0a2f27; /* klarer, freundlicher Hintergrund */
 }
 
 #city {
@@ -94,14 +94,13 @@ body {
   padding: 18px 22px;
   border: 2px solid #a0fff0;
   color: #a0fff0;
-  background: rgba(0,0,0,0.25);
-  backdrop-filter: blur(6px);
+  background: transparent; /* klar, kein milchiger Schleier */
   border-radius: 12px;
   font-size: 1.3rem;
   cursor: pointer;
   transition: 0.3s;
   animation: float 3s infinite ease-in-out;
-  box-shadow: 0 0 28px #a0fff0aa, inset 0 0 12px #a0fff044;
+  box-shadow: 0 0 28px #a0fff0aa, 0 0 50px #a0fff0bb, inset 0 0 12px #a0fff044;
   opacity: 0;
   transform: translateY(40px);
   position: relative;
@@ -167,7 +166,7 @@ canvas.height = window.innerHeight;
 
 let neonColors = ["#00fff0","#ff66cc","#99ff77","#ffe066","#00ffff","#ff00ff"];
 let buildings = [];
-for(let i=0;i<120;i++){  // mehr Gebäude → mehr Neon
+for(let i=0;i<120;i++){
   buildings.push({
     x: Math.random()*canvas.width,
     y: canvas.height-Math.random()*300,
@@ -181,7 +180,7 @@ for(let i=0;i<120;i++){  // mehr Gebäude → mehr Neon
 }
 
 let particles = [];
-for(let i=0;i<200;i++){ // mehr Partikel
+for(let i=0;i<200;i++){
   particles.push({
     x: Math.random()*canvas.width,
     y: Math.random()*canvas.height,
@@ -193,10 +192,10 @@ for(let i=0;i<200;i++){ // mehr Partikel
 function draw(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
 
-  // sanfterer Gradient Hintergrund
+  // Klarer Gradient Hintergrund
   let gradient = ctx.createLinearGradient(0,0,0,canvas.height);
-  gradient.addColorStop(0,"#0c3f35");
-  gradient.addColorStop(1,"#081a16");
+  gradient.addColorStop(0,"#0fa68f"); // freundliches cyan-grün
+  gradient.addColorStop(1,"#081a16"); // dunkler Boden
   ctx.fillStyle = gradient;
   ctx.fillRect(0,0,canvas.width,canvas.height);
 
