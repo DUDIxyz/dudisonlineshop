@@ -4,21 +4,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Under Construction - Cyberpunk City</title>
-
 <style>
-/* RESET */
 * { margin:0; padding:0; box-sizing:border-box; }
 
 html, body {
     width:100%;
     height:100%;
     overflow:hidden;
-    font-family: 'Arial', sans-serif;
+    font-family:'Arial', sans-serif;
     background:black;
     color:white;
 }
 
-/* CANVAS */
 #cityCanvas {
     position:fixed;
     top:0; left:0;
@@ -47,16 +44,15 @@ h1 {
     letter-spacing:2px;
     margin-bottom:20px;
     color:#14ffad;
-    text-shadow: 0 0 5px #14ffad, 0 0 10px #14ffad;
+    text-shadow: 0 0 10px #14ffad, 0 0 20px #14ffad;
 }
 
 p {
     font-size:1.2rem;
-    opacity:0.8;
+    opacity:0.85;
     margin-bottom:40px;
 }
 
-/* BUTTONS */
 .btn-container {
     display:flex;
     flex-wrap:wrap;
@@ -88,7 +84,6 @@ p {
 }
 </style>
 </head>
-
 <body>
 
 <canvas id="cityCanvas"></canvas>
@@ -108,7 +103,7 @@ p {
 
 <script>
 // ======================
-// Cyberpunk City Canvas
+// Cyberpunk City Canvas VISIBLE & Alive
 // ======================
 
 const canvas = document.getElementById("cityCanvas");
@@ -120,71 +115,72 @@ let h = canvas.height = window.innerHeight;
 window.addEventListener("resize", ()=>{
     w = canvas.width = window.innerWidth;
     h = canvas.height = window.innerHeight;
-    initCity();
+    initBuildings();
+    initParticles();
 });
 
-// City layers
+// ========== BUILDINGS ==========
 let buildings = [];
-let particles = [];
-
-// init buildings
-function initCity(){
+function initBuildings(){
     buildings = [];
-    const numBuildings = 50;
+    const numBuildings = 60;
     for(let i=0;i<numBuildings;i++){
-        const width = 30 + Math.random()*40;
-        const height = 50 + Math.random()*300;
+        const width = 40 + Math.random()*60;
+        const height = 100 + Math.random()*350;
         const x = Math.random()*w;
-        buildings.push({x:x, width:width, height:height, color:`hsl(${Math.random()*50+150}, 80%, 40%)`});
+        const neon = `hsl(${150 + Math.random()*50}, 80%, 50%)`; // grün/cyan
+        buildings.push({x, width, height, neon});
     }
 }
 
-// init particles
+// ========== PARTICLES ==========
+let particles = [];
 function initParticles(){
     particles = [];
-    for(let i=0;i<100;i++){
+    for(let i=0;i<150;i++){
         particles.push({
             x: Math.random()*w,
             y: Math.random()*h,
-            radius: 1 + Math.random()*2,
-            speed: 0.5 + Math.random(),
-            alpha: 0.1 + Math.random()*0.3
+            radius: 1 + Math.random()*3,
+            speed: 0.5 + Math.random()*1.5,
+            alpha: 0.2 + Math.random()*0.5
         });
     }
 }
 
-// draw buildings
+// ========== DRAW BUILDINGS ==========
 function drawBuildings(){
     buildings.forEach(b=>{
-        ctx.fillStyle = b.color;
+        // Building glow
+        ctx.fillStyle = b.neon;
+        ctx.shadowColor = b.neon;
+        ctx.shadowBlur = 15;
         ctx.fillRect(b.x, h-b.height, b.width, b.height);
     });
 }
 
-// draw particles
+// ========== DRAW PARTICLES ==========
 function drawParticles(){
     particles.forEach(p=>{
         ctx.beginPath();
-        ctx.arc(p.x,p.y,p.radius,0,Math.PI*2);
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI*2);
         ctx.fillStyle = `rgba(20,255,173,${p.alpha})`;
         ctx.fill();
-
-        // move particle down (rain effect)
         p.y += p.speed;
-        if(p.y > h) p.y = -10;
+        if(p.y>h) p.y = -5;
     });
 }
 
-// glow effect overlay
+// ========== NEON GLOW OVERLAY ==========
 function drawGlow(){
-    const gradient = ctx.createRadialGradient(w/2, h/2, 0, w/2, h/2, w);
-    gradient.addColorStop(0, "rgba(20,255,173,0.05)");
-    gradient.addColorStop(1, "rgba(0,0,0,0.5)");
+    const gradient = ctx.createRadialGradient(w/2,h/2,0,w/2,h/2,w);
+    gradient.addColorStop(0,"rgba(20,255,173,0.08)");
+    gradient.addColorStop(1,"rgba(0,0,0,0.5)");
     ctx.fillStyle = gradient;
     ctx.fillRect(0,0,w,h);
 }
 
-// animate loop
+// ========== ANIMATE ==========
 function animate(){
     ctx.clearRect(0,0,w,h);
     drawBuildings();
@@ -193,11 +189,10 @@ function animate(){
     requestAnimationFrame(animate);
 }
 
-// init
-initCity();
+// INIT
+initBuildings();
 initParticles();
 animate();
-
 </script>
 
 </body>
