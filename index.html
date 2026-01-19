@@ -3,7 +3,14 @@
 <head>
 <style>
 body {
+  margin: 0;
+  padding: 0;
   background: black;
+}
+#city {
+  width: 100vw;
+  height: 100vh;
+  display: block;
 }
 </style>
 </head>
@@ -12,10 +19,20 @@ body {
 <canvas id="city"></canvas>
 
 <script>
-alert("JS funktioniert!");
+const canvas = document.getElementById("city");
+const ctx = canvas.getContext("2d");
+
+// Canvas-Größe setzen
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+// Zeichne etwas sichtbares
+ctx.fillStyle = "lime";
+ctx.fillRect(0, 0, 200, 200);
 </script>
 
 </body>
 </html>
+
 
 
