@@ -3,175 +3,96 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Under Construction</title>
+<title>Under Construction - Cyberpunk City</title>
 
 <style>
+/* RESET */
+* { margin:0; padding:0; box-sizing:border-box; }
 
-    /* RESET */
-    * { margin:0; padding:0; box-sizing:border-box; }
+html, body {
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    font-family: 'Arial', sans-serif;
+    background:black;
+    color:white;
+}
 
-    html, body {
-        width:100%;
-        height:100%;
-        overflow-x:hidden;
-        background:black;
-        font-family: 'Arial', sans-serif;
-        color:white;
-    }
+/* CANVAS */
+#cityCanvas {
+    position:fixed;
+    top:0; left:0;
+    width:100%;
+    height:100%;
+    z-index:-1;
+}
 
-    /* PARALLAX BACKGROUND LAYERS */
-    .layer {
-        position:fixed;
-        top:0; left:0;
-        width:100%;
-        height:100%;
-        pointer-events:none;
-        z-index:-3;
-    }
+/* CONTENT */
+.content {
+    position:relative;
+    width:100%;
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    padding:20px;
+    z-index:1;
+}
 
-    .gradient-layer {
-        background: linear-gradient(130deg, #092d25, #0b4639, #0e5f4d);
-        background-size:300% 300%;
-        animation: gradientShift 25s ease infinite;
-        z-index:-3;
-    }
+h1 {
+    font-size:3rem;
+    text-transform:uppercase;
+    letter-spacing:2px;
+    margin-bottom:20px;
+    color:#14ffad;
+    text-shadow: 0 0 5px #14ffad, 0 0 10px #14ffad;
+}
 
-    @keyframes gradientShift {
-        0% { background-position:0% 50%; }
-        50% { background-position:100% 50%; }
-        100% { background-position:0% 50%; }
-    }
+p {
+    font-size:1.2rem;
+    opacity:0.8;
+    margin-bottom:40px;
+}
 
-    /* FLOATING PARTICLES */
-    .particles {
-        position:absolute;
-        top:0; left:0;
-        width:100%; height:100%;
-        overflow:hidden;
-        z-index:-2;
-    }
+/* BUTTONS */
+.btn-container {
+    display:flex;
+    flex-wrap:wrap;
+    gap:20px;
+    justify-content:center;
+}
 
-    .particle {
-        position:absolute;
-        width:6px; height:6px;
-        background:rgba(255,255,255,0.5);
-        border-radius:50%;
-        animation: floatUp linear infinite;
-    }
+.btn {
+    padding:14px 28px;
+    border-radius:12px;
+    background:rgba(255,255,255,0.1);
+    border:1px solid rgba(255,255,255,0.3);
+    backdrop-filter: blur(6px);
+    cursor:pointer;
+    text-transform:uppercase;
+    letter-spacing:1px;
+    font-weight:600;
+    color:white;
+    transition:0.4s;
+    position:relative;
+    overflow:hidden;
+}
 
-    @keyframes floatUp {
-        from { transform:translateY(100vh) scale(0.3); opacity:0.2; }
-        to { transform:translateY(-10vh) scale(1); opacity:0; }
-    }
-
-    /* MOUSE LIGHT SPOT */
-    .spotlight {
-        position:fixed;
-        top:0; left:0;
-        width:200px; height:200px;
-        pointer-events:none;
-        background:radial-gradient(circle, rgba(255,255,255,0.15), transparent 70%);
-        transform:translate(-50%, -50%);
-        z-index:-1;
-        mix-blend-mode: screen;
-    }
-
-    /* MAIN CONTAINER */
-    .content {
-        position:relative;
-        width:100%;
-        height:100vh;
-        display:flex;
-        flex-direction:column;
-        justify-content:center;
-        align-items:center;
-        text-align:center;
-        padding:20px;
-        animation: fadeIn 2s ease forwards;
-        opacity:0;
-    }
-
-    @keyframes fadeIn {
-        from { opacity:0; transform:translateY(30px);}
-        to { opacity:1; transform:translateY(0);}
-    }
-
-    /* GLITCH TITLE */
-    h1 {
-        font-size:3rem;
-        letter-spacing:2px;
-        position:relative;
-        text-transform:uppercase;
-        margin-bottom:20px;
-        animation: glitch 2s infinite;
-    }
-
-    @keyframes glitch {
-        0% { text-shadow:2px 2px #14ffad, -2px -2px #14ffad; }
-        50% { text-shadow:-2px 2px #14ffad, 2px -2px #14ffad; }
-        100% { text-shadow:2px -2px #14ffad, -2px 2px #14ffad; }
-    }
-
-    p {
-        font-size:1.2rem;
-        opacity:0.8;
-        margin-bottom:40px;
-    }
-
-    /* BUTTONS */
-    .btn-container {
-        display:flex;
-        flex-wrap:wrap;
-        gap:20px;
-        justify-content:center;
-        width:90%;
-    }
-
-    .btn {
-        padding:14px 28px;
-        border-radius:12px;
-        background:rgba(255,255,255,0.1);
-        border:1px solid rgba(255,255,255,0.3);
-        backdrop-filter: blur(6px);
-        cursor:pointer;
-        text-transform:uppercase;
-        letter-spacing:1px;
-        font-weight:600;
-        transition:0.4s;
-        position:relative;
-        overflow:hidden;
-    }
-
-    .btn:hover {
-        transform:translateY(-6px) scale(1.05);
-        box-shadow:0 0 20px #14ffad;
-        border-color:#14ffad;
-        color:#14ffad;
-    }
-
-    .btn::before {
-        content:"";
-        position:absolute;
-        top:-100%; left:0;
-        width:100%; height:100%;
-        background:linear-gradient(0deg, transparent, rgba(255,255,255,0.3));
-        transition:0.4s;
-    }
-
-    .btn:hover::before {
-        top:0%;
-    }
-
+.btn:hover {
+    transform:translateY(-6px) scale(1.05);
+    box-shadow:0 0 20px #14ffad;
+    border-color:#14ffad;
+    color:#14ffad;
+}
 </style>
 </head>
+
 <body>
 
-<!-- BACKGROUND LAYERS -->
-<div class="layer gradient-layer"></div>
-<div class="particles"></div>
-<div class="spotlight"></div>
+<canvas id="cityCanvas"></canvas>
 
-<!-- CONTENT -->
 <div class="content">
     <h1>🚧 Under Construction 🚧</h1>
     <p>Hello! Our website is still in progress.<br>Stay tuned, exciting things are coming soon!</p>
@@ -185,28 +106,97 @@
     </div>
 </div>
 
-<!-- JAVASCRIPT -->
 <script>
+// ======================
+// Cyberpunk City Canvas
+// ======================
 
-    /* PARALLAX & MOUSE SPOTLIGHT */
-    const spotlight = document.querySelector(".spotlight");
+const canvas = document.getElementById("cityCanvas");
+const ctx = canvas.getContext("2d");
 
-    window.addEventListener("mousemove", (e) => {
-        spotlight.style.left = e.clientX + "px";
-        spotlight.style.top = e.clientY + "px";
-    });
+let w = canvas.width = window.innerWidth;
+let h = canvas.height = window.innerHeight;
 
-    /* CREATE RANDOM PARTICLES */
-    const particles = document.querySelector(".particles");
+window.addEventListener("resize", ()=>{
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = window.innerHeight;
+    initCity();
+});
 
-    for (let i = 0; i < 60; i++) {
-        let p = document.createElement("div");
-        p.classList.add("particle");
-        p.style.left = Math.random() * 100 + "vw";
-        p.style.animationDuration = 4 + Math.random() * 6 + "s";
-        p.style.animationDelay = Math.random() * 5 + "s";
-        particles.appendChild(p);
+// City layers
+let buildings = [];
+let particles = [];
+
+// init buildings
+function initCity(){
+    buildings = [];
+    const numBuildings = 50;
+    for(let i=0;i<numBuildings;i++){
+        const width = 30 + Math.random()*40;
+        const height = 50 + Math.random()*300;
+        const x = Math.random()*w;
+        buildings.push({x:x, width:width, height:height, color:`hsl(${Math.random()*50+150}, 80%, 40%)`});
     }
+}
+
+// init particles
+function initParticles(){
+    particles = [];
+    for(let i=0;i<100;i++){
+        particles.push({
+            x: Math.random()*w,
+            y: Math.random()*h,
+            radius: 1 + Math.random()*2,
+            speed: 0.5 + Math.random(),
+            alpha: 0.1 + Math.random()*0.3
+        });
+    }
+}
+
+// draw buildings
+function drawBuildings(){
+    buildings.forEach(b=>{
+        ctx.fillStyle = b.color;
+        ctx.fillRect(b.x, h-b.height, b.width, b.height);
+    });
+}
+
+// draw particles
+function drawParticles(){
+    particles.forEach(p=>{
+        ctx.beginPath();
+        ctx.arc(p.x,p.y,p.radius,0,Math.PI*2);
+        ctx.fillStyle = `rgba(20,255,173,${p.alpha})`;
+        ctx.fill();
+
+        // move particle down (rain effect)
+        p.y += p.speed;
+        if(p.y > h) p.y = -10;
+    });
+}
+
+// glow effect overlay
+function drawGlow(){
+    const gradient = ctx.createRadialGradient(w/2, h/2, 0, w/2, h/2, w);
+    gradient.addColorStop(0, "rgba(20,255,173,0.05)");
+    gradient.addColorStop(1, "rgba(0,0,0,0.5)");
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0,0,w,h);
+}
+
+// animate loop
+function animate(){
+    ctx.clearRect(0,0,w,h);
+    drawBuildings();
+    drawParticles();
+    drawGlow();
+    requestAnimationFrame(animate);
+}
+
+// init
+initCity();
+initParticles();
+animate();
 
 </script>
 
