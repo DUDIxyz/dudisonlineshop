@@ -2,16 +2,18 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Under Construction – Cyberpunk Level 3.1</title>
+<title>Under Construction – Cyberpunk Style</title>
+<!-- Google Font Orbitron -->
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
 body {
   margin: 0;
   padding: 0;
-  font-family: Arial, sans-serif;
-  color: white;
+  font-family: 'Orbitron', Arial, sans-serif; /* Cyberpunk Schrift */
+  color: #d0f0e0;
   overflow-x: hidden;
-  background: #000;
+  background: #0a1f1c; /* leichter dunkler Hintergrund */
 }
 
 #city {
@@ -31,14 +33,15 @@ body {
   font-size: 2rem;
   letter-spacing: 2px;
   font-weight: bold;
-  color: #00f0ff;
+  color: #a0fff0;
   overflow: hidden;
 }
 
 /* Glitch Text */
 .glitch {
   position: relative;
-  color: #00f0ff;
+  color: #a0fff0;
+  font-family: 'Orbitron', Arial, sans-serif;
 }
 .glitch::before,
 .glitch::after {
@@ -49,12 +52,12 @@ body {
 .glitch::before {
   animation: glitchTop 1s infinite linear alternate-reverse;
   clip: rect(0, 900px, 30%, 0);
-  color: #ff00e6;
+  color: #ff99cc;
 }
 .glitch::after {
   animation: glitchBottom 1s infinite linear alternate-reverse;
   clip: rect(70%, 900px, 100%, 0);
-  color: #39ff14;
+  color: #99ff77;
 }
 
 @keyframes glitchTop {
@@ -82,7 +85,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 120px;
-  padding-bottom: 400px; /* genug Scroll für Animation */
+  padding-bottom: 400px;
   padding-top: 50px;
 }
 
@@ -90,16 +93,16 @@ body {
   width: 260px;
   margin: 0 auto;
   padding: 18px 22px;
-  border: 2px solid #00f0ff;
-  color: #00f0ff;
-  background: rgba(0,0,0,0.4);
+  border: 2px solid #a0fff0;
+  color: #a0fff0;
+  background: rgba(0,0,0,0.3);
   backdrop-filter: blur(6px);
   border-radius: 12px;
   font-size: 1.3rem;
   cursor: pointer;
   transition: 0.3s;
   animation: float 3s infinite ease-in-out;
-  box-shadow: 0 0 18px #00f0ff88, inset 0 0 10px #00f0ff44;
+  box-shadow: 0 0 18px #a0fff088, inset 0 0 10px #a0fff044;
   opacity: 0;
   transform: translateY(40px);
   position: relative;
@@ -113,7 +116,7 @@ body {
   height: 100%;
   top: 0;
   left: 0;
-  background: linear-gradient(120deg,#00f0ff,#ff00e6,#39ff14);
+  background: linear-gradient(120deg,#a0fff0,#ff99cc,#99ff77);
   opacity: 0.7;
   transition: 0.4s;
   mix-blend-mode: screen;
@@ -156,12 +159,13 @@ body {
 </div>
 
 <script>
+/* Canvas Cyberpunk */
 const canvas = document.getElementById("city");
 const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-let neonColors = ["#00f0ff","#ff00e6","#39ff14","#ffe600"];
+let neonColors = ["#a0fff0","#ff99cc","#99ff77","#ffe0a0"];
 let buildings = [];
 for(let i=0;i<80;i++){
   buildings.push({
@@ -188,25 +192,26 @@ for(let i=0;i<150;i++){
 
 function draw(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
+
+  // sanfter freundlicher Gradient
   let gradient = ctx.createLinearGradient(0,0,0,canvas.height);
-  gradient.addColorStop(0,"#001322");
-  gradient.addColorStop(1,"#000");
+  gradient.addColorStop(0,"#0a3f35");
+  gradient.addColorStop(1,"#0a1f1c");
   ctx.fillStyle = gradient;
   ctx.fillRect(0,0,canvas.width,canvas.height);
 
   let scrollFactor = window.scrollY / window.innerHeight;
 
   for(let b of buildings){
-    // sanft Farbwechsel
-    let hue = (Date.now()*0.05 + b.colorOffset)%360;
+    let hue = (Date.now()*0.03 + b.colorOffset)%360;
     ctx.shadowBlur = b.glow + scrollFactor*15;
-    ctx.shadowColor = `hsl(${hue}, 100%, 50%)`;
-    ctx.fillStyle = `hsl(${hue}, 100%, 50%)33`;
+    ctx.shadowColor = `hsl(${hue}, 80%, 60%)`;
+    ctx.fillStyle = `hsl(${hue},80%,60%)33`;
     ctx.fillRect(b.x,b.y-b.height,b.width,b.height);
     b.y += b.speed*Math.sin(Date.now()*0.0004 + b.x)*(1+scrollFactor);
   }
 
-  ctx.fillStyle="#00f0ff";
+  ctx.fillStyle="#a0fff0";
   for(let p of particles){
     ctx.fillRect(p.x,p.y,p.size,p.size*4);
     p.y += p.speed*(1+scrollFactor*0.5);
@@ -234,7 +239,6 @@ function revealOnScroll(){
 document.addEventListener("scroll",revealOnScroll);
 revealOnScroll();
 
-/* Resize Canvas */
 window.onresize = ()=>{
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
@@ -243,6 +247,7 @@ window.onresize = ()=>{
 
 </body>
 </html>
+
 
 
 
