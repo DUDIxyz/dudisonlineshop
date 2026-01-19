@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Under Construction – Cyberpunk Clear Background</title>
+<title>Under Construction – Cyberpunk Neon Clear</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
@@ -12,7 +12,7 @@ body {
   font-family: 'Orbitron', Arial, sans-serif;
   color: #d0f0e0;
   overflow-x: hidden;
-  background: #0a2f27; /* klarer, freundlicher Hintergrund */
+  background: #050f0c; /* richtig dunkler, klarer Hintergrund */
 }
 
 #city {
@@ -83,8 +83,8 @@ body {
   text-align: center;
   display: flex;
   flex-direction: column;
-  gap: 120px;
-  padding-bottom: 400px;
+  gap: 100px; /* enger, angenehmer Abstand */
+  padding-bottom: 200px;
   padding-top: 50px;
 }
 
@@ -94,7 +94,7 @@ body {
   padding: 18px 22px;
   border: 2px solid #a0fff0;
   color: #a0fff0;
-  background: transparent; /* klar, kein milchiger Schleier */
+  background: transparent;
   border-radius: 12px;
   font-size: 1.3rem;
   cursor: pointer;
@@ -192,11 +192,8 @@ for(let i=0;i<200;i++){
 function draw(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
 
-  // Klarer Gradient Hintergrund
-  let gradient = ctx.createLinearGradient(0,0,0,canvas.height);
-  gradient.addColorStop(0,"#0fa68f"); // freundliches cyan-grün
-  gradient.addColorStop(1,"#081a16"); // dunkler Boden
-  ctx.fillStyle = gradient;
+  // Klarer Hintergrund ohne milchigen Schleier
+  ctx.fillStyle = "#050f0c"; // sehr dunkel, satt
   ctx.fillRect(0,0,canvas.width,canvas.height);
 
   let scrollFactor = window.scrollY / window.innerHeight;
@@ -246,6 +243,7 @@ window.onresize = ()=>{
 
 </body>
 </html>
+
 
 
 
