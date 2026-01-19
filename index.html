@@ -1,65 +1,112 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DudisOnlineShop</title>
-  <style>
-    /* Basic Reset */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Under Construction</title>
 
+<style>
     body {
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: linear-gradient(135deg, #1e3c72, #2a5298);
-      color: white;
-      text-align: center;
-      padding: 20px;
-    }
+        margin: 0;
+        padding: 0;
+        height: 200vh; /* damit scrollen möglich ist */
+        font-family: Arial, sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
 
-    .container {
-      max-width: 600px;
-      background: rgba(0,0,0,0.4);
-      padding: 40px;
-      border-radius: 15px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+        /* dynamischer Gradient */
+        background: linear-gradient(135deg, #0a3c2f, #145447);
+        background-size: 200% 200%;
+        transition: background-position 0.2s linear;
+        color: #e7ffe9;
     }
 
     h1 {
-      font-size: 3rem;
-      margin-bottom: 20px;
+        font-size: 2.5rem;
+        margin-bottom: 10px;
     }
 
     p {
-      font-size: 1.3rem;
-      margin-bottom: 30px;
+        font-size: 1.2rem;
+        opacity: 0.9;
+        margin-bottom: 40px;
     }
 
-    .highlight {
-      color: #f4d03f;
-      font-weight: bold;
+    .btn-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        justify-content: center;
+        margin-top: 20px;
     }
 
-    footer {
-      margin-top: 20px;
-      font-size: 0.9rem;
-      color: #ccc;
+    .btn {
+        padding: 12px 25px;
+        background: rgba(255, 255, 255, 0.15);
+        border: 2px solid rgba(255, 255, 255, 0.4);
+        border-radius: 12px;
+        backdrop-filter: blur(4px);
+        color: white;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: transform 0.3s, box-shadow 0.4s;
+        position: relative;
+        overflow: hidden;
+        text-transform: uppercase;
+        letter-spacing: 1px;
     }
-  </style>
+
+    .btn:hover {
+        transform: translateY(-5px) scale(1.05);
+        box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+    }
+
+    /* Glowing pulse effect */
+    .btn::after {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255,255,255,0.25) 10%, transparent 60%);
+        opacity: 0;
+        animation: pulse 4s infinite;
+    }
+
+    @keyframes pulse {
+        0% { opacity: 0.1; transform: scale(0.9); }
+        50% { opacity: 0.4; transform: scale(1.1); }
+        100% { opacity: 0.1; transform: scale(0.9); }
+    }
+
+</style>
 </head>
+
 <body>
-  <div class="container">
+
     <h1>🚧 Under Construction 🚧</h1>
-    <p>Hello! Our website is <span class="highlight">still in progress</span>.<br>
-       Stay tuned, exciting things are coming soon!</p>
-    <footer>© 2026 DudisOnlineShop</footer>
-  </div>
+    <p>Hello! Our website is still in progress.<br>Stay tuned, exciting things are coming soon!</p>
+
+    <div class="btn-container">
+        <div class="btn">Startseite</div>
+        <div class="btn">About Me</div>
+        <div class="btn">Shop</div>
+        <div class="btn">Auktion</div>
+        <div class="btn">All My Socials</div>
+    </div>
+
+<script>
+    // Background moves when user scrolls
+    window.addEventListener("scroll", () => {
+        let scrollPos = window.scrollY;
+        document.body.style.backgroundPosition = `0px ${scrollPos / 2}px`;
+    });
+</script>
+
 </body>
 </html>
+
