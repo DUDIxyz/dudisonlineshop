@@ -2,14 +2,14 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Under Construction</title>
+<title>Under Construction – Level 2</title>
 
 <style>
 /* RESET */
 body {
   margin: 0;
   padding: 0;
-  overflow: hidden;
+  overflow-x: hidden;
   font-family: Arial, sans-serif;
   color: white;
 }
@@ -25,51 +25,54 @@ body {
   z-index: -1;
 }
 
-/* OVERLAY TEXT */
+/* TITELTEXT */
 #title-box {
-  position: absolute;
-  top: 10%;
+  position: relative;
+  top: 40px;
   width: 100%;
   text-align: center;
   font-size: 2rem;
   letter-spacing: 2px;
 }
 
-/* BUTTON CONTAINER */
+/* BUTTON SCROLL-BEREICH */
 #button-box {
-  position: absolute;
-  bottom: 10%;
+  margin-top: 80px;
   width: 100%;
   text-align: center;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   gap: 20px;
+  padding-bottom: 200px;
 }
 
-/* BUTTON STYLE */
+/* HOLOGRAMM-BUTTONS */
 .btn {
-  padding: 12px 24px;
+  width: 250px;
+  margin: 0 auto;
+  padding: 15px 20px;
   border: 2px solid #00f0ff;
   color: #00f0ff;
-  background: rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(4px);
-  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(6px);
+  border-radius: 10px;
   font-size: 1.2rem;
   cursor: pointer;
   transition: 0.3s;
   animation: float 3s infinite ease-in-out;
+  box-shadow: 0 0 15px #00f0ff77, inset 0 0 15px #00f0ff44;
 }
 
 .btn:hover {
   background: #00f0ff;
   color: black;
-  transform: scale(1.1);
+  transform: scale(1.05);
 }
 
-/* Buttons bewegen sich leicht */
+/* schweben */
 @keyframes float {
   0% { transform: translateY(0px); }
-  50% { transform: translateY(-6px); }
+  50% { transform: translateY(-8px); }
   100% { transform: translateY(0px); }
 }
 </style>
@@ -77,7 +80,7 @@ body {
 
 <body>
 
-<!-- CYBERPUNK SKYLINE CANVAS -->
+<!-- CANVAS -->
 <canvas id="city"></canvas>
 
 <!-- TEXT -->
@@ -87,7 +90,7 @@ body {
   Stay tuned, exciting things are coming soon!
 </div>
 
-<!-- BUTTONS -->
+<!-- SCROLLBARE BUTTONS -->
 <div id="button-box">
   <div class="btn">Startseite</div>
   <div class="btn">About Me</div>
@@ -96,7 +99,6 @@ body {
   <div class="btn">All My Socials</div>
 </div>
 
-<!-- CYBERPUNK SKYLINE JS -->
 <script>
 const canvas = document.getElementById("city");
 const ctx = canvas.getContext("2d");
@@ -104,34 +106,46 @@ const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
+// Farben
 const neonColors = ["#00f0ff", "#ff00e6", "#39ff14", "#ffe600"];
-let buildings = [];
-const buildingCount = 60;
 
-// Gebäude erstellen
-for (let i = 0; i < buildingCount; i++) {
+// Gebäude
+let buildings = [];
+for (let i = 0; i < 80; i++) {
   buildings.push({
     x: Math.random() * canvas.width,
-    y: canvas.height - Math.random() * 300,
+    y: canvas.height - Math.random() * 250,
     width: 40 + Math.random() * 60,
     height: Math.random() * 300,
     color: neonColors[Math.floor(Math.random() * neonColors.length)],
-    glow: Math.random() * 20 + 5
+    glow: Math.random() * 20 + 5,
+    speed: Math.random() * 0.3 + 0.1
   });
 }
 
-// Animation Loop
+// Partikel (Regen)
+let particles = [];
+for (let i = 0; i < 150; i++) {
+  particles.push({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    size: Math.random() * 2 + 1,
+    speed: Math.random() * 4 + 1
+  });
+}
+
+// Animation
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   // Hintergrund Gradient
   let gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-  gradient.addColorStop(0, "#001d28");
+  gradient.addColorStop(0, "#001322");
   gradient.addColorStop(1, "#000");
   ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  // Gebäude
+  // Gebäude / Parallax
   for (let b of buildings) {
     ctx.shadowBlur = b.glow;
     ctx.shadowColor = b.color;
@@ -139,8 +153,20 @@ function draw() {
     ctx.fillStyle = b.color + "33";
     ctx.fillRect(b.x, b.y - b.height, b.width, b.height);
 
-    // leichte Bewegung
-    b.y += Math.sin(Date.now() * 0.001 + b.x) * 0.2;
+    // kleine Bewegung
+    b.y += b.speed * Math.sin(Date.now() * 0.0004 + b.x);
+  }
+
+  // Partikel Regen
+  ctx.fillStyle = "#00f0ff";
+  for (let p of particles) {
+    ctx.fillRect(p.x, p.y, p.size, p.size * 4);
+
+    p.y += p.speed;
+    if (p.y > canvas.height) {
+      p.y = -10;
+      p.x = Math.random() * canvas.width;
+    }
   }
 
   requestAnimationFrame(draw);
@@ -148,7 +174,6 @@ function draw() {
 
 draw();
 
-// Canvas anpassen wenn Fenstergröße geändert wird
 window.onresize = () => {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
@@ -157,6 +182,7 @@ window.onresize = () => {
 
 </body>
 </html>
+
 
 
 
