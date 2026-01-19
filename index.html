@@ -2,18 +2,17 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Under Construction – Cyberpunk Style</title>
-<!-- Google Font Orbitron -->
+<title>Under Construction – Cyberpunk Bright</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Orbitron', Arial, sans-serif; /* Cyberpunk Schrift */
+  font-family: 'Orbitron', Arial, sans-serif;
   color: #d0f0e0;
   overflow-x: hidden;
-  background: #0a1f1c; /* leichter dunkler Hintergrund */
+  background: #0a2a23; /* etwas heller als vorher */
 }
 
 #city {
@@ -37,7 +36,6 @@ body {
   overflow: hidden;
 }
 
-/* Glitch Text */
 .glitch {
   position: relative;
   color: #a0fff0;
@@ -159,13 +157,12 @@ body {
 </div>
 
 <script>
-/* Canvas Cyberpunk */
 const canvas = document.getElementById("city");
 const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-let neonColors = ["#a0fff0","#ff99cc","#99ff77","#ffe0a0"];
+let neonColors = ["#00f0ff","#ff99cc","#99ff77","#ffe0a0"];
 let buildings = [];
 for(let i=0;i<80;i++){
   buildings.push({
@@ -193,10 +190,10 @@ for(let i=0;i<150;i++){
 function draw(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
 
-  // sanfter freundlicher Gradient
+  // Heller, freundlicher Gradient
   let gradient = ctx.createLinearGradient(0,0,0,canvas.height);
-  gradient.addColorStop(0,"#0a3f35");
-  gradient.addColorStop(1,"#0a1f1c");
+  gradient.addColorStop(0,"#0fffd8"); // heller cyan/grün
+  gradient.addColorStop(1,"#0a2a23"); // dunkler grüner Ton
   ctx.fillStyle = gradient;
   ctx.fillRect(0,0,canvas.width,canvas.height);
 
