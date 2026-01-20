@@ -17,7 +17,7 @@
   #content {
     max-width: 800px;
     margin: 0 auto;
-    padding: 100px 20px 500px 20px; /* genug Abstand für Scroll */
+    padding: 150px 20px 600px 20px; /* genug Platz für Scroll */
     font-size: 24px;
     color: #000;
     line-height: 1.6;
@@ -26,8 +26,7 @@
     margin: 50px 0;
     white-space: pre-wrap;
   }
-  /* erzeugt mindestens Scrollhöhe */
-  body { min-height: 150vh; }
+  body { min-height: 200vh; } /* erzeugt Scrollbar */
 </style>
 </head>
 <body>
@@ -38,8 +37,11 @@ const content = document.getElementById("content");
 
 const textParagraphs = [
   "Hi, I’m Dawud. Life has been a series of roads, both literal and metaphorical, and I’ve chosen to explore them fully.",
-  "I’m driven by curiosity, movement, and the thrill of the unknown.",
-  "Some days I’m planning my next adventure, other days I’m simply enjoying the quiet moments between challenges."
+  "I’m driven by curiosity, movement, and the thrill of the unknown. Some days I’m planning my next adventure, other days I’m simply enjoying the quiet moments between challenges.",
+  "I’ve always found meaning in learning by doing, in testing limits, and in pushing beyond what seems comfortable. My work and passions often intersect in unexpected ways – part discipline, part chaos, always forward motion.",
+  "Right now, my days are a mix of creation, training, and discovery. I’m experimenting, growing, and mapping out paths that aren’t always obvious to others.",
+  "The future is deliberately undefined – but there’s a direction, a subtle gravity guiding me toward what matters most.",
+  "I don’t reveal everything here, because some things are meant to be experienced rather than explained. What you see is only the beginning of a story that’s still unfolding."
 ];
 
 // Paragraphs setup
@@ -66,7 +68,7 @@ function lerp(a,b,t){return a+(b-a)*t}
 // Check if element is in viewport
 function isInViewport(el){
   const rect = el.getBoundingClientRect();
-  return rect.top < window.innerHeight*0.8;
+  return rect.top < window.innerHeight*0.8; // trigger wenn 80% sichtbar
 }
 
 // Animation loop
@@ -89,7 +91,7 @@ function animate(){
       const targetLetters = parseInt(p.dataset.text.length);
       let currentLetters = parseInt(p.dataset.current);
       if(currentLetters < targetLetters){
-        currentLetters += 1;
+        currentLetters += 1; // ein Buchstabe pro Frame
         p.dataset.current = currentLetters;
         p.textContent = p.dataset.text.slice(0,currentLetters);
       }
