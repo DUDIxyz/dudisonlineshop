@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>STARTSEITE // SCROLL ENGINE ONLINE</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+:root {
+  --bg1: #050505;
+  --bg2: #0f1020;
+  --accent: #7cffd4;
+  --accent2: #ff6ad5;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: black;
+  color: white;
+  font-family: monospace;
+  overflow-x: hidden;
+}
+
+body {
+  min-height: 1200vh; /* ewig scrollen */
+}
+
+/* =========================
+   FIXED BACKGROUND LAYERS
+========================= */
+
+#bg-gradient {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at center, #111 0%, #000 60%);
+  z-index: -5;
+  transition: filter 0.2s linear;
+}
+
+#noise {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -4;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      rgba(255,255,255,0.03),
+      rgba(255,255,255,0.03) 1px,
+      transparent 1px,
+      transparent 2px
+    );
+  mix-blend-mode: overlay;
+}
+
+/* =========================
+   CANVAS
+========================= */
+
+canvas {
+  position: fixed;
+  inset: 0;
+  z-index: -3;
+}
+
+/* =========================
+   HERO
+========================= */
+
+.hero {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: clamp(2rem, 6vw, 6rem);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  animation: flicker 4s infinite;
+}
+
+.hero p {
+  opacity: 0.6;
+}
+
+@keyframes flicker {
+  0% { opacity: 1; }
+  2% { opacity: 0.2; }
+  4% { opacity: 1; }
+  100% { opacity: 1; }
+}
+
+/* =========================
+   SCROLL SECTIONS (FAKE)
+========================= */
+
+.section {
+  position: relative;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  opacity: 0.05;
+  transition: opacity 0.3s;
+}
+
+.section.active {
+  opacity: 1;
+}
+
+.parallax {
+  position: absolute;
+  font-size: 10vw;
+  opacity: 0.08;
+  white-space: nowrap;
+}
+
+/* =========================
+   GLITCH TEXT
+========================= */
+
+.glitch {
+  position: relative;
+}
+
+.glitch::before,
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+}
+
+.glitch::before {
+  color: var(--accent);
+  transform: translate(2px, -2px);
+  opacity: 0.6;
+}
+
+.glitch::after {
+  color: var(--accent2);
+  transform: translate(-2px, 2px);
+  opacity: 0.6;
+}
+
+/* =========================
+   FOOTER ZONE
+========================= */
+
+#end {
+  height: 200vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  opacity: 0.4;
+}
+</style>
+</head>
+
+<body>
+
+<div id="bg-gradient"></div>
+<div id="noise"></div>
+<canvas id="canvas"></canvas>
+
+<div class="hero">
+  <h1 class="glitch" data-text="UNDER CONSTRUCTION">UNDER CONSTRUCTION</h1>
+  <p>scroll to destabilize reality</p>
+</div>
+
+<!-- FAKE CONTENT -->
+<div class="section"><div class="parallax">SYSTEM INITIALIZING</div></div>
+<div class="section"><div class="parallax">SCROLL DATA STREAM</div></div>
+<div class="section"><div class="parallax">LAYERS DESYNCING</div></div>
+<div class="section"><div class="parallax">NO FINAL STATE</div></div>
+<div class="section"><div class="parallax">WORK IN PROGRESS</div></div>
+
+<div id="end">you were never supposed to reach this</div>
+
+<script>
+/* =========================
+   CANVAS PARTICLES
+========================= */
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+
+let w, h;
+function resize() {
+  w = canvas.width = window.innerWidth;
+  h = canvas.height = window.innerHeight;
+}
+window.addEventListener("resize", resize);
+resize();
+
+const particles = Array.from({ length: 120 }, () => ({
+  x: Math.random() * w,
+  y: Math.random() * h,
+  r: Math.random() * 2 + 0.5,
+  vx: (Math.random() - 0.5) * 0.3,
+  vy: (Math.random() - 0.5) * 0.3
+}));
+
+function draw() {
+  ctx.clearRect(0, 0, w, h);
+  for (const p of particles) {
+    p.x += p.vx;
+    p.y += p.vy;
+
+    if (p.x < 0 || p.x > w) p.vx *= -1;
+    if (p.y < 0 || p.y > h) p.vy *= -1;
+
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    ctx.fillStyle = "rgba(255,255,255,0.5)";
+    ctx.fill();
+  }
+  requestAnimationFrame(draw);
+}
+draw();
+
+/* =========================
+   SCROLL ENGINE
+========================= */
+const sections = document.querySelectorAll(".section");
+const bg = document.getElementById("bg-gradient");
+
+window.addEventListener("scroll", () => {
+  const scroll = window.scrollY;
+  const progress = scroll / (document.body.scrollHeight - innerHeight);
+
+  bg.style.filter = `hue-rotate(${progress * 360}deg) blur(${progress * 8}px)`;
+
+  sections.forEach((sec, i) => {
+    const start = i * innerHeight;
+    const end = start + innerHeight;
+    sec.classList.toggle("active", scroll > start && scroll < end);
+
+    const para = sec.querySelector(".parallax");
+    if (para) {
+      para.style.transform = `translateX(${scroll * 0.05 * (i % 2 ? -1 : 1)}px)`;
+    }
+  });
+
+  // micro glitch
+  if (Math.random() < 0.01) {
+    document.body.style.filter = "invert(1)";
+    setTimeout(() => document.body.style.filter = "", 50);
+  }
+});
+</script>
+
+</body>
+</html>
