@@ -255,6 +255,133 @@ window.addEventListener("scroll", () => {
   }
 });
 </script>
+<!-- =========================
+     SCROLL TERMINAL
+========================= -->
+<style>
+#terminal {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  max-height: 40vh;
+  background: rgba(0,0,0,0.85);
+  color: #7cffd4;
+  font-family: monospace;
+  font-size: 14px;
+  padding: 10px;
+  box-sizing: border-box;
+  transform: translateY(100%);
+  transition: transform 0.4s ease;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+}
+
+#terminal.active {
+  transform: translateY(0);
+}
+
+#terminal-output {
+  flex: 1;
+  overflow-y: auto;
+  white-space: pre-wrap;
+}
+
+#terminal-input-line {
+  display: flex;
+}
+
+#terminal-input-line span {
+  margin-right: 6px;
+}
+
+#terminal-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #7cffd4;
+  font-family: monospace;
+  font-size: 14px;
+  flex: 1;
+}
+
+@media (max-width: 600px) {
+  #terminal {
+    font-size: 13px;
+    max-height: 50vh;
+  }
+}
+</style>
+
+<div id="terminal">
+  <div id="terminal-output">
+SYSTEM READY  
+type <help>  
+  </div>
+  <div id="terminal-input-line">
+    <span>&gt;</span>
+    <input id="terminal-input" autocomplete="off" />
+  </div>
+</div>
+
+<script>
+const terminal = document.getElementById("terminal");
+const output = document.getElementById("terminal-output");
+const input = document.getElementById("terminal-input");
+
+let activated = false;
+
+const commands = {
+  help: () => `
+available commands:
+help
+whoami
+status
+clear
+exit
+`,
+  whoami: () => "you are early.",
+  status: () => "under construction.\nprogress undefined.",
+  clear: () => {
+    output.textContent = "";
+    return "";
+  },
+  exit: () => "there is no exit."
+};
+
+function print(text) {
+  if (!text) return;
+  output.textContent += "\n" + text;
+  output.scrollTop = output.scrollHeight;
+}
+
+input.addEventListener("keydown", e => {
+  if (e.key === "Enter") {
+    const value = input.value.trim();
+    print("> " + value);
+
+    if (commands[value]) {
+      print(commands[value]());
+    } else {
+      print("command not found");
+    }
+
+    input.value = "";
+  }
+});
+
+/* Scroll trigger */
+window.addEventListener("scroll", () => {
+  const progress = window.scrollY / (document.body.scrollHeight - innerHeight);
+
+  if (progress > 0.35 && !activated) {
+    activated = true;
+    terminal.classList.add("active");
+    setTimeout(() => input.focus(), 300);
+  }
+});
+</script>
 
 </body>
 </html>
