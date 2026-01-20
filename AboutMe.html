@@ -8,32 +8,23 @@
   html, body {
     margin: 0;
     padding: 0;
-    height: 100%;
-    overflow-x: hidden;
     font-family: Arial, sans-serif;
     background: white;
+    height: 100%;
+    overflow-x: hidden;
     transition: background 0.3s linear;
   }
-
   #content {
     max-width: 800px;
     margin: 0 auto;
-    padding: 100px 20px;
+    padding: 150px 20px 300px 20px;
     font-size: 24px;
     color: #000;
     line-height: 1.6;
   }
-
-  .paragraph {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
+  p {
+    margin: 50px 0;
     white-space: pre-wrap;
-  }
-
-  .visible {
-    opacity: 1;
-    transform: translateY(0);
   }
 </style>
 </head>
@@ -43,69 +34,73 @@
 <script>
 const content = document.getElementById("content");
 
-const texts = [
-  "Hi, I’m Dudi. Welcome to my world.",
-  "I love adventure, creativity, and pushing my own limits.",
-  "This page is not only about me(a young man trying to make a living w/o working for somebody else), but also about the journey.",
-  "Every scroll you make reveals a little more of the story.",
-  "Colors change, words appear, just like life unfolds.",
-  "At the end, you reach the unknown – deep, dark, and full of possibilities."
+const textParagraphs = [
+  "Hi, I’m Dawud. Life has been a series of roads, both literal and metaphorical, and I’ve chosen to explore them fully.",
+  "I’m driven by curiosity, movement, and the thrill of the unknown. Some days I’m planning my next adventure, other days I’m simply enjoying the quiet moments between challenges.",
+  "I’ve always found meaning in learning by doing, in testing limits, and in pushing beyond what seems comfortable. My work and passions often intersect in unexpected ways – part discipline, part chaos, always forward motion.",
+  "Right now, my days are a mix of creation, training, and discovery. I’m experimenting, growing, and mapping out paths that aren’t always obvious to others.",
+  "The future is deliberately undefined – but there’s a direction, a subtle gravity guiding me toward what matters most.",
+  "I don’t reveal everything here, because some things are meant to be experienced rather than explained. What you see is only the beginning of a story that’s still unfolding."
 ];
 
-// Create empty paragraphs
-const paragraphs = texts.map(text => {
+// Paragraphs setup
+const paragraphs = textParagraphs.map(text => {
   const p = document.createElement("p");
-  p.className = "paragraph";
-  p.dataset.text = text; // store full text
+  p.dataset.text = text;
+  p.dataset.current = "0"; // letters typed
   content.appendChild(p);
   return p;
 });
 
-// function to type letters smoothly
-function typeLetter(p, lettersCount) {
-  p.textContent = p.dataset.text.slice(0, lettersCount);
+// Background colors
+const colors = [
+  [255,255,255],
+  [255,192,203],
+  [255,0,0],
+  [128,0,128],
+  [0,0,255],
+  [0,0,0]
+];
+
+function lerp(a,b,t){return a+(b-a)*t}
+
+// Check if element is in viewport
+function isInViewport(el){
+  const rect = el.getBoundingClientRect();
+  return rect.top < window.innerHeight*0.8; // trigger when 80% visible
 }
 
-// scroll listener
-window.addEventListener("scroll", () => {
+// Animation loop
+function animate(){
   const scrollTop = window.scrollY;
   const docHeight = document.body.scrollHeight - window.innerHeight;
-  const scrollFraction = scrollTop / docHeight;
+  const scrollFraction = Math.min(1, scrollTop / docHeight);
 
-  // background gradient
-  const colors = [
-    [255,255,255],   // white
-    [255,192,203],   // pink
-    [255,0,0],       // red
-    [128,0,128],     // purple
-    [0,0,255],       // blue
-    [0,0,0]          // black
-  ];
-
-  let colorIndex = Math.floor(scrollFraction * (colors.length -1));
+  // Background interpolation
+  let colorIndex = Math.floor(scrollFraction * (colors.length-1));
   let nextIndex = Math.min(colorIndex+1, colors.length-1);
-  let t = (scrollFraction * (colors.length-1)) - colorIndex;
+  let t = (scrollFraction*(colors.length-1)) - colorIndex;
   const c1 = colors[colorIndex];
   const c2 = colors[nextIndex];
-  const r = Math.floor(c1[0] + (c2[0]-c1[0])*t);
-  const g = Math.floor(c1[1] + (c2[1]-c1[1])*t);
-  const b = Math.floor(c1[2] + (c2[2]-c1[2])*t);
-  document.body.style.background = `rgb(${r},${g},${b})`;
+  document.body.style.background = `rgb(${Math.floor(lerp(c1[0],c2[0],t))},${Math.floor(lerp(c1[1],c2[1],t))},${Math.floor(lerp(c1[2],c2[2],t))})`;
 
-  // show paragraphs progressively
-  const numParagraphs = paragraphs.length;
-  let visibleCount = Math.floor(scrollFraction * numParagraphs * 1.5); 
-  visibleCount = Math.min(visibleCount, numParagraphs);
+  // Letters typing per paragraph if in viewport
+  paragraphs.forEach((p)=>{
+    if(isInViewport(p)){
+      const targetLetters = parseInt(p.dataset.text.length);
+      let currentLetters = parseInt(p.dataset.current);
+      if(currentLetters < targetLetters){
+        currentLetters += 1; // one letter per frame
+        p.dataset.current = currentLetters;
+        p.textContent = p.dataset.text.slice(0,currentLetters);
+      }
+    }
+  });
 
-  for(let i=0; i<visibleCount; i++){
-    const p = paragraphs[i];
-    if(!p.classList.contains("visible")) p.classList.add("visible");
+  requestAnimationFrame(animate);
+}
 
-    // calculate letters to show
-    const letters = Math.floor(scrollFraction * p.dataset.text.length * 2); // multiplier for smoother reveal
-    typeLetter(p, letters);
-  }
-});
+requestAnimationFrame(animate);
 </script>
 </body>
 </html>
