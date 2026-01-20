@@ -17,7 +17,7 @@
   #content {
     max-width: 800px;
     margin: 0 auto;
-    padding: 150px 20px 300px 20px;
+    padding: 100px 20px 500px 20px; /* genug Abstand für Scroll */
     font-size: 24px;
     color: #000;
     line-height: 1.6;
@@ -26,6 +26,8 @@
     margin: 50px 0;
     white-space: pre-wrap;
   }
+  /* erzeugt mindestens Scrollhöhe */
+  body { min-height: 150vh; }
 </style>
 </head>
 <body>
@@ -36,11 +38,8 @@ const content = document.getElementById("content");
 
 const textParagraphs = [
   "Hi, I’m Dawud. Life has been a series of roads, both literal and metaphorical, and I’ve chosen to explore them fully.",
-  "I’m driven by curiosity, movement, and the thrill of the unknown. Some days I’m planning my next adventure, other days I’m simply enjoying the quiet moments between challenges.",
-  "I’ve always found meaning in learning by doing, in testing limits, and in pushing beyond what seems comfortable. My work and passions often intersect in unexpected ways – part discipline, part chaos, always forward motion.",
-  "Right now, my days are a mix of creation, training, and discovery. I’m experimenting, growing, and mapping out paths that aren’t always obvious to others.",
-  "The future is deliberately undefined – but there’s a direction, a subtle gravity guiding me toward what matters most.",
-  "I don’t reveal everything here, because some things are meant to be experienced rather than explained. What you see is only the beginning of a story that’s still unfolding."
+  "I’m driven by curiosity, movement, and the thrill of the unknown.",
+  "Some days I’m planning my next adventure, other days I’m simply enjoying the quiet moments between challenges."
 ];
 
 // Paragraphs setup
@@ -67,7 +66,7 @@ function lerp(a,b,t){return a+(b-a)*t}
 // Check if element is in viewport
 function isInViewport(el){
   const rect = el.getBoundingClientRect();
-  return rect.top < window.innerHeight*0.8; // trigger when 80% visible
+  return rect.top < window.innerHeight*0.8;
 }
 
 // Animation loop
@@ -76,7 +75,7 @@ function animate(){
   const docHeight = document.body.scrollHeight - window.innerHeight;
   const scrollFraction = Math.min(1, scrollTop / docHeight);
 
-  // Background interpolation
+  // Background gradient
   let colorIndex = Math.floor(scrollFraction * (colors.length-1));
   let nextIndex = Math.min(colorIndex+1, colors.length-1);
   let t = (scrollFraction*(colors.length-1)) - colorIndex;
@@ -84,13 +83,13 @@ function animate(){
   const c2 = colors[nextIndex];
   document.body.style.background = `rgb(${Math.floor(lerp(c1[0],c2[0],t))},${Math.floor(lerp(c1[1],c2[1],t))},${Math.floor(lerp(c1[2],c2[2],t))})`;
 
-  // Letters typing per paragraph if in viewport
+  // Letters typing
   paragraphs.forEach((p)=>{
     if(isInViewport(p)){
       const targetLetters = parseInt(p.dataset.text.length);
       let currentLetters = parseInt(p.dataset.current);
       if(currentLetters < targetLetters){
-        currentLetters += 1; // one letter per frame
+        currentLetters += 1;
         p.dataset.current = currentLetters;
         p.textContent = p.dataset.text.slice(0,currentLetters);
       }
@@ -104,4 +103,5 @@ requestAnimationFrame(animate);
 </script>
 </body>
 </html>
+
 
