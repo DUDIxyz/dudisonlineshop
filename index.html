@@ -110,6 +110,22 @@
 </head>
 <body>
 
+  <div id="ig-banner" style="
+  display:none;
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  background:white;
+  border-bottom:1px solid #e5e7eb;
+  padding:12px;
+  text-align:center;
+  font-size:14px;
+  z-index:999;
+">
+  👉 click top right ⋯ and then <b>“open in browser for a better UX :) ”</b> ↑
+</div>
+
   <div class="container">
 
     <div class="profile">
@@ -132,6 +148,17 @@
     </footer>
 
   </div>
+
+  <script>
+  function isInstagram() {
+    return navigator.userAgent.toLowerCase().includes("instagram");
+  }
+
+  if (isInstagram()) {
+    document.getElementById("ig-banner").style.display = "block";
+    document.body.style.paddingTop = "60px";
+  }
+</script>
 
 </body>
 </html>
